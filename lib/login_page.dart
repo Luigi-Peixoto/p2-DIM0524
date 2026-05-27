@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:p2_dim0524/products_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -25,7 +26,12 @@ class _LoginPageState extends State<LoginPage> {
       // valida login
       if (_userController.text == 'admin' &&
           _passwordController.text == '123456') {
-        print('Login realizado com sucesso');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const ProductPage(),
+          ),
+        );
       } else {
         setState(() {
           credenciaisInvalidas = true;
