@@ -1,0 +1,29 @@
+class Product {
+  final int id;
+  final String title;
+  final String description;
+  final double price;
+  final String image;
+
+  Product({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.price,
+    required this.image,
+  });
+
+  /// Converte um Map vindo do JSON da API em um objeto Product
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json['id'] as int,
+      title: json['title'] as String,
+      description: json['description'] as String,
+      price: (json['price'] as num).toDouble(),
+      image: json['image'] as String,
+    );
+  }
+
+  /// Formata o preço para exibição em reais
+  String get precoFormatado => 'R\$ ${price.toStringAsFixed(2)}';
+}

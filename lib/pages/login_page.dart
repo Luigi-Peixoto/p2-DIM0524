@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:p2_dim0524/products_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:p2_dim0524/services/auth_service.dart';
+import 'package:p2_dim0524/pages/products_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,34 +12,50 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-
   final _userController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  bool credenciaisInvalidas = false;
+  bool _credenciaisInvalidas = false;
+  bool _carregando = false;
 
-  void fazerLogin() {
+  Future<void> fazerLogin() async {
     setState(() {
-      credenciaisInvalidas = false;
+      _credenciaisInvalidas = false;
     });
 
-    // valida campos vazios
-    if (_formKey.currentState!.validate()) {
-      // valida login
-      if (_userController.text == 'admin' &&
-          _passwordController.text == '123456') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const ProductPage(),
-          ),
-        );
-      } else {
-        setState(() {
-          credenciaisInvalidas = true;
-        });
-      }
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _carregando = true);
+
+    final token = await AuthService.login(
+      _userController.text.trim(),
+      _passwordController.text,
+    );
+
+    if (!mounted) return;
+    setState(() => _carregando = false);
+
+    if (token != null) {
+      // Salva credenciais no dispositivo para login automático
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('username', _userController.text.trim());
+      await prefs.setString('password', _passwordController.text);
+
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const ProductPage()),
+      );
+    } else {
+      setState(() => _credenciaisInvalidas = true);
     }
+  }
+
+  @override
+  void dispose() {
+    _userController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -103,8 +121,8 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
 
-                // Mensagem de erro de login
-                if (credenciaisInvalidas) ...[
+                // Mensagem de erro
+                if (_credenciaisInvalidas) ...[
                   const SizedBox(height: 12),
                   const Text(
                     'Credenciais inválidas',
@@ -121,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: fazerLogin,
+                    onPressed: _carregando ? null : fazerLogin,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -129,13 +147,22 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
+                    child: _carregando
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Text(
+                            'Login',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
                   ),
                 ),
 

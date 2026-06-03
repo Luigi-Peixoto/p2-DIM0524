@@ -4,12 +4,14 @@ class ProductCard extends StatelessWidget {
   final String nome;
   final String descricao;
   final String preco;
+  final String? imagemUrl;
 
   const ProductCard({
     super.key,
     required this.nome,
     required this.descricao,
     required this.preco,
+    this.imagemUrl,
   });
 
   @override
@@ -23,19 +25,27 @@ class ProductCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 115,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(8),
-              ),
-            ),
-            child: const Icon(
-              Icons.image_not_supported,
-              size: 55,
-              color: Colors.black87,
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+            child: SizedBox(
+              height: 115,
+              width: double.infinity,
+              child: imagemUrl != null
+                  ? Image.network(
+                      imagemUrl!,
+                      fit: BoxFit.contain,
+                      loadingBuilder: (_, child, progress) {
+                        if (progress == null) return child;
+                        return Container(
+                          color: Colors.grey.shade300,
+                          child: const Center(
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        );
+                      },
+                      errorBuilder: (_, __, ___) => _placeholder(),
+                    )
+                  : _placeholder(),
             ),
           ),
 
@@ -105,6 +115,17 @@ class ProductCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _placeholder() {
+    return Container(
+      color: Colors.grey.shade300,
+      child: const Icon(
+        Icons.image_not_supported,
+        size: 55,
+        color: Colors.black87,
       ),
     );
   }
