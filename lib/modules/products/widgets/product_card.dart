@@ -19,9 +19,7 @@ class ProductCard extends StatelessWidget {
     return Card(
       color: const Color(0xFFF8F0FA),
       elevation: 3,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -55,10 +53,7 @@ class ProductCard extends StatelessWidget {
               nome,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
             ),
           ),
 
@@ -68,10 +63,7 @@ class ProductCard extends StatelessWidget {
               descricao,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Colors.grey,
-                fontSize: 10,
-              ),
+              style: const TextStyle(color: Colors.grey, fontSize: 10),
             ),
           ),
 

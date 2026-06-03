@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:p2_dim0524/pages/login_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:p2_dim0524/models/product.dart';
+import 'package:p2_dim0524/modules/login/login_page.dart';
+import 'package:p2_dim0524/modules/products/models/product.dart';
+import 'package:p2_dim0524/modules/products/widgets/product_card.dart';
 import 'package:p2_dim0524/services/product_service.dart';
-import 'package:p2_dim0524/components/product_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({super.key});
@@ -64,10 +64,7 @@ class _ProductPageState extends State<ProductPage> {
         elevation: 0,
         title: const Text(
           'Loja Online',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
         actions: [

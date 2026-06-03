@@ -13,7 +13,6 @@ class Product {
     required this.image,
   });
 
-  /// Converte um Map vindo do JSON da API em um objeto Product
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       id: json['id'] as int,
@@ -24,6 +23,5 @@ class Product {
     );
   }
 
-  /// Formata o preço para exibição em reais
   String get precoFormatado => 'R\$ ${price.toStringAsFixed(2)}';
 }

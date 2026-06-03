@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:p2_dim0524/modules/products/products_page.dart';
 import 'package:p2_dim0524/services/auth_service.dart';
-import 'package:p2_dim0524/pages/products_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -36,7 +36,6 @@ class _LoginPageState extends State<LoginPage> {
     setState(() => _carregando = false);
 
     if (token != null) {
-      // Salva credenciais no dispositivo para login automático
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('username', _userController.text.trim());
       await prefs.setString('password', _passwordController.text);
@@ -72,15 +71,11 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 const Text(
                   'Minha aplicação',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
 
                 const SizedBox(height: 32),
 
-                // Usuário
                 TextFormField(
                   controller: _userController,
                   decoration: InputDecoration(
@@ -101,7 +96,6 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 16),
 
-                // Senha
                 TextFormField(
                   controller: _passwordController,
                   obscureText: true,
@@ -121,7 +115,6 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
 
-                // Mensagem de erro
                 if (_credenciaisInvalidas) ...[
                   const SizedBox(height: 12),
                   const Text(
@@ -158,10 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                           )
                         : const Text(
                             'Login',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
+                            style: TextStyle(color: Colors.white, fontSize: 16),
                           ),
                   ),
                 ),
