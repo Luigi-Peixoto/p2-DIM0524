@@ -5,6 +5,7 @@ class ProductCard extends StatelessWidget {
   final String descricao;
   final String preco;
   final String? imagemUrl;
+  final VoidCallback? onComprar;
 
   const ProductCard({
     super.key,
@@ -12,6 +13,7 @@ class ProductCard extends StatelessWidget {
     required this.descricao,
     required this.preco,
     this.imagemUrl,
+    this.onComprar,
   });
 
   @override
@@ -89,7 +91,7 @@ class ProductCard extends StatelessWidget {
                 SizedBox(
                   height: 28,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: onComprar,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
