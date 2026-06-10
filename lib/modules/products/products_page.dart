@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:p2_dim0524/modules/cart/cart_page.dart';
 import 'package:p2_dim0524/modules/login/login_page.dart';
 import 'package:p2_dim0524/modules/products/models/product.dart';
 import 'package:p2_dim0524/modules/products/widgets/product_card.dart';
+import 'package:p2_dim0524/services/cart_service.dart';
 import 'package:p2_dim0524/services/product_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -68,9 +70,14 @@ class _ProductPageState extends State<ProductPage> {
         ),
         iconTheme: const IconThemeData(color: Colors.white),
         actions: [
-          const Padding(
-            padding: EdgeInsets.only(right: 4),
-            child: Icon(Icons.shopping_cart, color: Colors.white),
+          IconButton(
+            icon: const Icon(Icons.shopping_cart, color: Colors.white),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const CartPage()),
+              );
+            },
           ),
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.white),
@@ -119,6 +126,16 @@ class _ProductPageState extends State<ProductPage> {
           descricao: produto.description,
           preco: produto.precoFormatado,
           imagemUrl: produto.image,
+          onComprar: () {
+            CartService.instance.add(produto);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('${produto.title} adicionado ao carrinho!'),
+                backgroundColor: Colors.black87,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          },
         );
       },
     );
